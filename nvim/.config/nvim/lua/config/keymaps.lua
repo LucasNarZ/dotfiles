@@ -64,4 +64,4 @@ vim.keymap.set("n", "<Esc><Esc>", ":noh<CR>")
 -- Open error
 vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float)
 
-vim.keymap.set("n", "<leader>gs", ":Git")
+vim.keymap.set("n", "<leader>gs", "<cmd>Git<CR>")
