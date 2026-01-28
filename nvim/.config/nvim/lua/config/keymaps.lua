@@ -14,6 +14,7 @@ vim.keymap.set('t', '<C-x>', '<C-\\><C-n><Cmd>ToggleTerm<CR>', opts)
 vim.keymap.set("v", "<A-j>", ":m '>+1<CR>gv=gv", opts)
 vim.keymap.set("v", "<A-k>", ":m '<-2<CR>gv=gv", opts)
 
+-- Press <leader> for copying to the clipboard
 vim.keymap.set("n", "<leader>yG", '"+yG', opts);
 vim.keymap.set("n", "<leader>y", '"+y', opts);
 vim.keymap.set("n", "<leader>Y", '"+yy', opts);
@@ -28,7 +29,7 @@ vim.keymap.set("n", "<leader>3", function() require("harpoon.ui").nav_file(3) en
 vim.keymap.set("n", "<leader>4", function() require("harpoon.ui").nav_file(4) end)
 vim.keymap.set("n", "<leader>5", function() require("harpoon.ui").nav_file(5) end)
 
-
+-- Neovim-Tree
 local treeApi = require('nvim-tree.api')
 local view = require('nvim-tree.view')
 
@@ -60,5 +61,7 @@ vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><
 
 vim.keymap.set("n", "<Esc><Esc>", ":noh<CR>")
 
-
+-- Open error
 vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float)
+
+vim.keymap.set("n", "<leader>gs", ":Git")
