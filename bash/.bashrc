@@ -123,4 +123,4 @@ PS1='\[\e[38;5;81m\]\u \
 \[\e[38;5;176m\][$(git_branch)]\
 \[\e[0m\] \$ '
 
-eval "$(direnv hook zsh)"
+eval "$(direnv hook bash)"
