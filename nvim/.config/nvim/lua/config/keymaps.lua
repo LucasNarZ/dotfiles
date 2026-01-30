@@ -63,5 +63,19 @@ vim.keymap.set("n", "<Esc><Esc>", ":noh<CR>")
 
 -- Open error
 vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float)
+vim.keymap.set("n", "<leader>E", function()
+  local opts = { focusable = false, close_events = { "CursorMoved", "BufHidden", "InsertEnter" } }
+  local line = vim.api.nvim_win_get_cursor(0)[1] - 1
+  local diags = vim.diagnostic.get(0, { lnum = line })
+  if #diags == 0 then return end
+  local messages = {}
+  for _, d in ipairs(diags) do
+    table.insert(messages, d.message)
+  end
+  local text = table.concat(messages, "\n")
+  vim.fn.setreg("+", text) 
+  vim.notify("Error!", vim.log.levels.INFO)
+end, { noremap = true, silent = true })
 
+-- Fugitive
 vim.keymap.set("n", "<leader>gs", "<cmd>Git<CR>")
