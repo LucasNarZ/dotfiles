@@ -11,7 +11,7 @@ return {
         dependencies = { "mason.nvim", "neovim/nvim-lspconfig" },
         config = function()
             require("mason-lspconfig").setup({
-                ensure_installed = { "ts_ls", "pyright", "html", "tailwindcss", "prettier" }
+                ensure_installed = { "ts_ls", "pyright", "html", "tailwindcss", "prettier", "emmet_ls" }
             })
         end
     },
@@ -48,6 +48,15 @@ return {
                 },
                 capabilities = capabilities
             }
+
+            nvim_lsp.emmet_ls.setup({
+                filetypes = {
+                    "html",
+                    "css",
+                    "javascriptreact",
+                    "typescriptreact",
+                },
+            })
         end
     }
 }
