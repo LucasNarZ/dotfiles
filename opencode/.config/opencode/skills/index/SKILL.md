@@ -14,6 +14,7 @@ metadata:
 
 | Skill | Description |
 |-------|-------------|
+| [nestjs-core](nestjs-core/) | Comprehensive reference to all NestJS skills |
 | [nestjs-feature-module](nestjs-feature-module/) | Create complete NestJS feature modules with entity, service, controller, providers, and DTOs |
 | [nestjs-dto-validation](nestjs-dto-validation/) | DTOs with class-validator decorators and global ValidationPipe |
 | [nestjs-authentication](nestjs-authentication/) | JWT + refresh token auth with HTTP-only cookies, guards, decorators |
