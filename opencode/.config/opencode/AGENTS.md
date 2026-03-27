@@ -11,6 +11,7 @@ This guidelines are general instruction on how to act. This rules takes preceden
 - Follow existing code style in the codebase
 - Run lint/typecheck before marking tasks complete
 - Write tests for new features
+- Avoid using comments on the code, only if you find really necessary
 - Prefer boring, proven solutions over trendy ones
 
 ## nestjs-standards
