@@ -111,7 +111,7 @@ if ! shopt -oq posix; then
   fi
 fi
 
-PATH=$PATH:/home/lucas/.local/bin
+PATH=$PATH:~/.local/bin
 
 git_branch() {
   branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null) || return
@@ -124,3 +124,6 @@ PS1='\[\e[38;5;81m\]\u \
 \[\e[0m\] \$ '
 
 eval "$(direnv hook bash)"
+
+# opencode
+export PATH=~/.opencode/bin:$PATH
