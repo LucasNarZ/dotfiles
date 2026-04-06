@@ -6,3 +6,8 @@ source $ZSH/oh-my-zsh.sh
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 eval "$(direnv hook zsh)"
 [ -f ~/.env ] && source ~/.env
+
+. "$HOME/.local/bin/env"
+
+# opencode
+export PATH=$HOME/.opencode/bin:$PATH
