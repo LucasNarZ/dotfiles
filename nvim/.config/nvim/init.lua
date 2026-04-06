@@ -5,7 +5,7 @@ vim.opt.relativenumber = true
 vim.opt.number = true
 
 vim.api.nvim_create_autocmd("FileType", {
-    pattern = { "javascript", "typescript", "typescriptreact", "javascriptreact", "html", "css", "lua", "json", "markdown", "c", "c++", "lua", "header" },
+    pattern = { "javascript", "typescript", "typescriptreact", "javascriptreact", "html", "css", "lua", "json", "markdown", "c", "c++", "lua", "header", "sh" },
     callback = function()
         vim.bo.tabstop = 4
         vim.bo.shiftwidth = 4
