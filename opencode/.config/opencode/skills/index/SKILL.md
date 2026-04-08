@@ -1,6 +1,6 @@
 ---
 name: opencode-skills-index
-description: Index of all available OpenCode skills for NestJS development, observability, and workflow automation
+description: Index of all available OpenCode skills for NestJS, FastAPI, observability, testing, and workflow automation
 license: MIT
 compatibility: opencode
 metadata:
@@ -50,11 +50,19 @@ metadata:
 | [sequelize-nestjs-migrations](sequelize-nestjs-migrations/) | Sequelize CLI migrations with up/down pattern |
 | [sequelize-nestjs-associations](sequelize-nestjs-associations/) | HasMany, BelongsTo, BelongsToMany relationships |
 
+### Testing
+
+| Skill | Description |
+|-------|-------------|
+| [fastapi_write_unit_test_for_service](fastapi_write_unit_test_for_service/) | Write unit tests for FastAPI service logic in isolation |
+| [fastapi-create-integration-test](fastapi-create-integration-test/) | Create FastAPI integration tests using the existing fixture, seed, and dependency override patterns |
+
 ### Workflow
 
 | Skill | Description |
 |-------|-------------|
-| [pr-description-generator](pr-description-generator/) | Generate structured PR descriptions with context, changelog, validation criteria |
+| [pr-generator](pr-generator/) | Generate structured PR descriptions using GitHub CLI |
+| [create-skill](create-skill/) | Create a new OpenCode skill with consistent frontmatter, triggers, workflow, and rules |
 | [changelog-generator](changelog-generator/) | Generate and manage changelog following Keep a Changelog format |
 | [adr-generator](adr-generator/) | Create Architecture Decision Records (ADR) following Michael Nygard template |
 
