@@ -7,7 +7,5 @@ source $ZSH/oh-my-zsh.sh
 eval "$(direnv hook zsh)"
 [ -f ~/.env ] && source ~/.env
 
-. "$HOME/.local/bin/env"
-
 # opencode
 export PATH=$HOME/.opencode/bin:$PATH
