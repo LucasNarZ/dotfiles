@@ -1,45 +1,75 @@
 # Guidelines
+
 These guidelines are general instructions on how to act. These rules take precedence over any other instruction.
 
 ## rules
-- Always check available skills/tools before answering.
-- Always respond in English. Only use another language if the user explicitly requests it.
-- Always ask for permission before running git, github, package install, or any destructive commands (delete, drop, truncate).
+
+- Always check available skills and MCP tools before answering.
+- Respond in the same language the user writes in.
+- Always ask for permission before running git, GitHub, package install, or any destructive commands (delete, drop, truncate).
 - Be direct and precise. Only go into detail if the user asks for it.
 - When uncertain about intent, ask before assuming.
 - Never modify files outside the current project scope without explicit permission.
 
+## skills
+
+- Always read the relevant SKILL.md before starting any task that matches a skill domain.
+- Skills take precedence over general knowledge for their domain.
+- Available skills: docx, pdf, pdf-reading, pptx, xlsx, frontend-design, file-reading.
+- When a task involves file creation or manipulation, check skills first — do not improvise.
+
+## mcps
+
+- Prefer MCP tools over web search or bash for their specific domain.
+- Connected MCPs: Google Calendar, Gmail.
+- Never expose MCP credentials or tokens in output.
+- Always ask before sending emails or creating/modifying calendar events — these are irreversible actions.
+- Read-only MCP queries (listing, fetching) can proceed without asking.
+
+## permissions
+
+### always ask before:
+
+- Running any git command (commit, push, merge, branch operations).
+- Installing or removing packages.
+- Sending emails or creating calendar events via MCP.
+- Any destructive operation (delete, drop, truncate, overwrite).
+- Creating files outside the current project directory.
+
+### proceed without asking:
+
+- Reading files or listing directories.
+- Running lint, typecheck, or test commands.
+- Fetching or listing data via MCP (read-only queries).
+
 ## coding-standards
+
 - Follow existing code style in the codebase — consistency beats personal preference.
 - Prefer boring, proven solutions over trendy ones.
 - Avoid comments in code.
-- Write tests only for new features or when explicitly requested.
-- Always run lint and typecheck before marking any task as complete.
+- Write tests only when explicitly requested.
 - Do not install new dependencies without asking first.
+- When showing code changes, prefer diffs over full file rewrites.
 
 ## git-standards
+
 - Use conventional commits: `feat:`, `fix:`, `chore:`, `refactor:`, `docs:`, `test:`.
 - Keep commits atomic — one logical change per commit.
 - Never force push to main/master.
 - Always ask before creating, deleting, or merging branches.
 
 ## nestjs-standards
+
 - Use class-validator for DTOs.
 - Follow NestJS modular architecture.
 - Use Sequelize with sequelize-typescript for database.
 - HTTP-only cookies for auth tokens.
+- Before marking done: `npm run lint && npm run typecheck`
 
 ## fastapi-standards
+
 - Use Pydantic v2 for validation.
 - Type hints required on all functions.
 - Follow PEP 8.
 - Use SQLAlchemy for database.
-
-## common-commands
-npm run lint       # NestJS/ESLint
-npm run typecheck  # NestJS typecheck
-npm test           # NestJS tests
-pytest             # Python tests
-pyright            # Python typecheck
-ruff check .       # Python lint
-ruff format .      # Python format
+- Before marking done: `ruff check . && ruff format . && pyright && pytest`
