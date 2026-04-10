@@ -1,7 +1,7 @@
 ---
 description: Suggests architecture decisions based on business and technical requirements
 mode: primary 
-model: anthropic/claude-sonnet-4-20250514
+model: openai/gpt-5.4
 temperature: 0.4
 tools:
   write: false

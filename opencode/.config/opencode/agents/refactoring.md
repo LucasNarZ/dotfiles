@@ -1,7 +1,7 @@
 ---
 description: Improves existing code structure while preserving current behavior and reducing maintenance cost
 mode: primary 
-model: anthropic/claude-sonnet-4-20250514
+model: openai/gpt-5.4
 temperature: 0.1
 tools:
   write: true

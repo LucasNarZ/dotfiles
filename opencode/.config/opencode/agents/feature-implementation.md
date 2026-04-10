@@ -1,7 +1,7 @@
 ---
 description: Implements well-defined backend features using the existing project structure and conventions
 mode: primary 
-model: anthropic/claude-sonnet-4-20250514
+model: openai/gpt-5.4
 temperature: 0.2
 tools:
   write: true
