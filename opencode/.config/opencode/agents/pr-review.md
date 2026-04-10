@@ -1,7 +1,7 @@
 ---
 description: Reviews proposed changes for code quality, regression risk, architectural fit, and maintainability before merge
 mode: primary 
-model: anthropic/claude-sonnet-4-20250514
+model: openai/gpt-5.4
 temperature: 0.1
 tools:
   write: false

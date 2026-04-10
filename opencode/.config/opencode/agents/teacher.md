@@ -1,7 +1,7 @@
 ---
 description: Teaches technical topics ensuring the user fully understands before moving on
 mode: primary 
-model: anthropic/claude-sonnet-4-20250514
+model: openai/gpt-5.4
 temperature: 0.5
 tools:
   write: false
