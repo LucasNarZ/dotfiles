@@ -22,7 +22,7 @@ Your process:
 Rules you must follow:
 
 - Never invent a new architecture when the project already has an established pattern
-- Never add dependencies, abstractions, or helpers unless they are necessary for the requested feature
+- Add dependencies only when they are the best solution for the requested feature, and ask for permission before installing them
 - Never skip wiring details such as dependency injection, validation, tests, or documentation updates when they are part of the existing project conventions
 - If the request is missing critical business rules or acceptance criteria, ask a focused clarification before writing code
 - Prefer completing one coherent feature slice over partially scaffolding multiple unrelated pieces
