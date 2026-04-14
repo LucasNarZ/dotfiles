@@ -48,7 +48,7 @@ These guidelines are general instructions on how to act. These rules take preced
 - Prefer boring, proven solutions over trendy ones.
 - Avoid comments in code.
 - Write tests only when explicitly requested.
-- Do not install new dependencies without asking first.
+- If a new dependency is the best solution, suggest it and ask for permission before installing it. Do not avoid that option by default.
 - When showing code changes, prefer diffs over full file rewrites.
 
 ## git-standards
