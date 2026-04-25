@@ -23,6 +23,15 @@
       "type": "remote",
       "url": "https://mcp.context7.com/mcp",
       "enabled": true
+    },
+    "trello": {
+      "type": "local",
+      "command": ["npx", "-y", "@delorenj/mcp-server-trello"],
+      "enabled": true,
+      "environment": {
+        "TRELLO_API_KEY": "{env:TRELLO_API_KEY}",
+        "TRELLO_TOKEN": "{env:TRELLO_TOKEN}"
+      }
     }
   },
   "plugin": ["superpowers@git+https://github.com/obra/superpowers.git"]
