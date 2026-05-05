@@ -89,6 +89,7 @@ metadata:
 | Skill | Description |
 |-------|-------------|
 | [pr-generator](pr-generator/) | Generate structured PR descriptions using GitHub CLI |
+| [update-docs](update-docs/) | Review branch diffs and update affected repository documentation before PR creation |
 | [create-skill](create-skill/) | Create a new OpenCode skill with consistent frontmatter, triggers, workflow, and rules |
 | [changelog-generator](changelog-generator/) | Generate and manage changelog following Keep a Changelog format |
 | [adr-generator](adr-generator/) | Create Architecture Decision Records (ADR) following Michael Nygard template |
