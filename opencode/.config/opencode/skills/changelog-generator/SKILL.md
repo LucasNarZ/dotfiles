@@ -33,7 +33,9 @@ When the user says something like **"add changes from branch X to changelog"**:
 Extract the branch name from the user's message. If not specified, ask for clarification.
 
 **Step 2 — Get the diff**
-Run the following commands to capture the diff between the current branch and the target:
+If the current session already captured the diff for the same target branch, reuse that output.
+
+Otherwise, run the following commands to capture the diff between the current branch and the target:
 
 ```bash
 git fetch --all --quiet

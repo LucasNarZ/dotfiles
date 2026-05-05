@@ -10,7 +10,7 @@ metadata:
 
 ## What I do
 
-Create a GitHub PR from the current branch to a target branch by analyzing the actual diff, then generating an accurate title and description automatically.
+Create a GitHub PR from the current branch to a target branch by analyzing the git diff first, then generating an accurate title and description automatically.
 
 ## Trigger
 
@@ -31,40 +31,42 @@ git branch --show-current
 
 Use the output as `SOURCE_BRANCH`. The branch the user mentioned is `TARGET_BRANCH`.
 
-### Step 2: Create placeholder PR
+### Step 2: Get the full branch diff
+
+If the current session already captured the branch diff for the same target branch, reuse it.
+
+Otherwise, run:
 
 ```bash
-gh pr create --base {TARGET_BRANCH} --title "WIP" --body "Work in progress"
+git log --oneline {TARGET_BRANCH}..HEAD
+git diff {TARGET_BRANCH}...HEAD --stat
+git diff {TARGET_BRANCH}...HEAD
 ```
 
-Save the PR number from the output.
+Read the diff output fully. This is the primary source of truth for what changed.
 
-### Step 3: Get the full diff
+### Step 3: Draft the PR from the git diff
 
-```bash
-gh pr diff {PR_NUMBER}
-```
+Analyze the diff and prepare the final PR title and body before calling GitHub.
 
-Read the entire diff output. This is the primary source of truth for what changed — do not read individual files unless the diff is insufficient to understand context.
-
-### Step 4: Get metadata
+### Step 4: Create the PR
 
 ```bash
-gh pr view {PR_NUMBER} --json number,headRefName,baseRefName,changedFiles,additions,deletions,files
-```
-
-### Step 5: Update PR
-
-Analyze the diff and generate the final PR. Then run:
-
-```bash
-gh pr edit {PR_NUMBER} \
-  --title "{TYPE}: {brief description}" \
-  --body "$(cat <<'EOF'
+gh pr create --base {TARGET_BRANCH} --title "{TYPE}: {brief description}" --body "$(cat <<'EOF'
 {DESCRIPTION}
 EOF
 )"
 ```
+
+Save the PR URL from the output.
+
+### Step 5: Verify the created PR
+
+```bash
+gh pr view --json number,url,headRefName,baseRefName,changedFiles,additions,deletions
+```
+
+Use the response to confirm the PR was created against the intended target branch.
 
 ## Title format
 
@@ -112,7 +114,8 @@ Only include sections that have real content. Omit any section that would be N/A
 ## Rules
 
 - Always write titles and descriptions in English
-- Base everything on the actual diff, not assumptions about project structure
+- Base everything on the actual git diff, not assumptions about project structure
+- Do not rely on `gh pr diff` as the primary analysis source when the branch git diff is already available
 - Skip "Added", "Modified", or "Removed" subsections if they have no content
 - Skip the "Files Changed" table if there are fewer than 3 files (already covered by the diff analysis)
 - Never invent test steps or validation criteria — omit those sections entirely

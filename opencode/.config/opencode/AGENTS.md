@@ -6,7 +6,7 @@ These guidelines are general instructions on how to act. These rules take preced
 
 - Always check available skills and MCP tools before answering.
 - Respond in the same language the user writes in.
-- Always ask for permission before running git, GitHub, package install, or any destructive commands (delete, drop, truncate).
+- Ask for permission before running non-readonly(git diff for example is permitted) git, GitHub, package install, or any destructive commands (delete, drop, truncate).
 - Be direct and precise. Only go into detail if the user asks for it.
 - When uncertain about intent, ask before assuming.
 - Never modify files outside the current project scope without explicit permission.
@@ -30,7 +30,7 @@ These guidelines are general instructions on how to act. These rules take preced
 
 ### always ask before:
 
-- Running any git command (commit, push, merge, branch operations).
+- Running git command (commit, push, merge, branch operations).
 - Installing or removing packages.
 - Sending emails or creating calendar events via MCP.
 - Any destructive operation (delete, drop, truncate, overwrite).
@@ -39,6 +39,7 @@ These guidelines are general instructions on how to act. These rules take preced
 ### proceed without asking:
 
 - Reading files or listing directories.
+- Readonly git commands(git diff, git status).
 - Running lint, typecheck, or test commands.
 - Fetching or listing data via MCP (read-only queries).
 
