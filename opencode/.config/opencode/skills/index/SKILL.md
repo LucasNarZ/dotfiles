@@ -16,44 +16,10 @@ metadata:
 |-------|-------------|
 | [frontend-design](frontend-design/) | Create distinctive, production-grade frontend interfaces with high design quality |
 
-### NestJS Core
-
-| Skill | Description |
-|-------|-------------|
-| [nestjs-core](nestjs-core/) | Comprehensive reference to all NestJS skills |
-| [nestjs-feature-module](nestjs-feature-module/) | Create complete NestJS feature modules with entity, service, controller, providers, and DTOs |
-| [nestjs-dto-validation](nestjs-dto-validation/) | DTOs with class-validator decorators and global ValidationPipe |
-| [nestjs-authentication](nestjs-authentication/) | JWT + refresh token auth with HTTP-only cookies, guards, decorators |
-| [nestjs-error-handling](nestjs-error-handling/) | Global exception filters, custom HTTP exceptions |
-| [nestjs-guards](nestjs-guards/) | AuthGuard, AdminGuard, RolesGuard for access control |
-| [nestjs-swagger-docs](nestjs-swagger-docs/) | OpenAPI/Swagger documentation in NestJS with annotations |
-| [nestjs-google-oauth](nestjs-google-oauth/) | Google OAuth authentication using google-auth-library |
-| [nestjs-email-service](nestjs-email-service/) | Email sending with Nodemailer for transactional emails |
-| [nestjs-rabbitmq-worker](nestjs-rabbitmq-worker/) | RabbitMQ consumer for background job processing |
-| [nestjs-unit-testing](nestjs-unit-testing/) | Jest testing with mocked repositories and testing module |
-| [nestjs-create-endpoint](nestjs-create-endpoint/) | Guides through the process of creating a new REST endpoint in a NestJS application by orchestrating existing granular skills |
-
-### FastAPI
-
-| Skill | Description |
-|-------|-------------|
-| [fastapi_create_endpoint](fastapi_create_endpoint/) | Create a new REST endpoint following the project architecture |
-| [fastapi_add_router_endpoint](fastapi_add_router_endpoint/) | Expose a service method via HTTP |
-| [fastapi_add_service_method](fastapi_add_service_method/) | Implement business logic and orchestration within a service method |
-| [fastapi_add_repository_method](fastapi_add_repository_method/) | Implement a new database operation within a repository |
-| [fastapi_add_integration_usage](fastapi_add_integration_usage/) | Integrate external services (e.g., S3) into the application |
-| [fastapi_apply_dependency_injection](fastapi_apply_dependency_injection/) | Ensure proper wiring of components using FastAPI's dependency injection |
-| [fastapi_enforce_permissions](fastapi_enforce_permissions/) | Ensure access control based on user role/permissions |
-| [fastapi_handle_exceptions](fastapi_handle_exceptions/) | Ensure consistent error handling using global exception filters and custom exceptions |
-| [fastapi_follow_import_convention](fastapi_follow_import_convention/) | Maintain clean and consistent imports across the codebase |
-
 ### Observability
 
 | Skill | Description |
 |-------|-------------|
-| [nestjs-prometheus-metrics](nestjs-prometheus-metrics/) | Prometheus metrics: HTTP requests, DB queries, connections via prom-client |
-| [nestjs-winston-logging](nestjs-winston-logging/) | Winston JSON structured logging with timestamps |
-| [nestjs-metrics-interceptor](nestjs-metrics-interceptor/) | HTTP metrics interceptor for request duration, size, status |
 | [docker-compose-observability](docker-compose-observability/) | Prometheus, Grafana, Loki, Promtail setup in Docker Compose |
 
 ### Infrastructure
@@ -62,21 +28,6 @@ metadata:
 |-------|-------------|
 | [docker-compose-nestjs](docker-compose-nestjs/) | NestJS + PostgreSQL + Redis multi-container setup |
 
-### Sequelize ORM
-
-| Skill | Description |
-|-------|-------------|
-| [sequelize-nestjs-model](sequelize-nestjs-model/) | Sequelize models with sequelize-typescript decorators, UUID PKs |
-| [sequelize-nestjs-repository](sequelize-nestjs-repository/) | Repository pattern with DI tokens and providers |
-| [sequelize-nestjs-migrations](sequelize-nestjs-migrations/) | Sequelize CLI migrations with up/down pattern |
-| [sequelize-nestjs-associations](sequelize-nestjs-associations/) | HasMany, BelongsTo, BelongsToMany relationships |
-
-### Testing
-
-| Skill | Description |
-|-------|-------------|
-| [fastapi_write_unit_test_for_service](fastapi_write_unit_test_for_service/) | Write unit tests for FastAPI service logic in isolation |
-| [fastapi-create-integration-test](fastapi-create-integration-test/) | Create FastAPI integration tests using the existing fixture, seed, and dependency override patterns |
 
 ### Quality And Review
 
@@ -91,6 +42,7 @@ metadata:
 | [pr-generator](pr-generator/) | Generate structured PR descriptions using GitHub CLI |
 | [update-docs](update-docs/) | Review branch diffs and update affected repository documentation before PR creation |
 | [create-skill](create-skill/) | Create a new OpenCode skill with consistent frontmatter, triggers, workflow, and rules |
+| [quick-task-workflow](quick-task-workflow/) | Lightweight approved workflow for small implementation tasks |
 | [changelog-generator](changelog-generator/) | Generate and manage changelog following Keep a Changelog format |
 | [adr-generator](adr-generator/) | Create Architecture Decision Records (ADR) following Michael Nygard template |
 
@@ -120,12 +72,8 @@ These skills are bundled from the superpowers package rather than this local ski
 | Category | Description |
 |----------|-------------|
 | **frontend** | UI and frontend interface design |
-| **nestjs** | Core NestJS patterns and best practices |
-| **fastapi** | FastAPI architecture, endpoints, services, repositories, and API conventions |
-| **sequelize** | Sequelize ORM specific implementations |
 | **observability** | Monitoring, logging, and metrics |
 | **infrastructure** | Docker and deployment configurations |
-| **testing** | Unit and integration testing |
 | **quality** | Code review and implementation quality workflows |
 | **workflow** | Development workflow and PR management |
 | **superpowers** | Process and execution disciplines loaded from the bundled superpowers package |
