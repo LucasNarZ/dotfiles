@@ -3,6 +3,7 @@ description: "Create a tailored resume HTML file from a job description"
 ---
 
 Leia o `AGENTS.md` do diretorio atual antes de executar esta tarefa.
+Use o workflow da skill `quick-task-workflow`.
 
 Arguments:
 - Descricao da vaga: all arguments
