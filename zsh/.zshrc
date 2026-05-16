@@ -7,6 +7,30 @@ source $ZSH/oh-my-zsh.sh
 eval "$(direnv hook zsh)"
 [ -f ~/.env ] && source ~/.env
 
+# Functions
+gub() {
+  local current_branch
+  local target_branch
+
+  current_branch=$(git branch --show-current)
+  target_branch="$1"
+
+  if [ -z "$target_branch" ]; then
+    echo "Uso: gupdatebranch <branch>"
+    return 1
+  fi
+
+  if [ -z "$current_branch" ]; then
+    echo "Erro: não foi possível detectar a branch atual."
+    return 1
+  fi
+
+  git checkout "$target_branch" &&
+  git fetch origin &&
+  git pull origin "$target_branch" &&
+  git checkout "$current_branch"
+}
+
 # Aliases
 alias vps-connect='ssh $VPS_USER@$VPS_IP'
 
