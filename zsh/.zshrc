@@ -7,6 +7,9 @@ source $ZSH/oh-my-zsh.sh
 eval "$(direnv hook zsh)"
 [ -f ~/.env ] && source ~/.env
 
+# Aliases
+alias vps-connect='ssh $VPS_USER@$VPS_IP'
+
 # uv
 export PATH="$HOME/.local/bin:$PATH"
 # opencode
