@@ -32,6 +32,11 @@
         "TRELLO_API_KEY": "{env:TRELLO_API_KEY}",
         "TRELLO_TOKEN": "{env:TRELLO_TOKEN}"
       }
+    },
+    "clickup": {
+      "type": "remote",
+      "url": "https://mcp.clickup.com/mcp",
+      "enabled": true
     }
   },
   "command": {},
