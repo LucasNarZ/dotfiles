@@ -7,6 +7,10 @@ vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Telescope help ta
 
 local opts = { noremap = true, silent = true }
 
+vim.keymap.set("n", "<leader>w", "<cmd>w<CR>")
+
+
+
 -- ToggleTerm
 vim.keymap.set('t', '<C-x>', '<C-\\><C-n><Cmd>ToggleTerm<CR>', opts)
 
