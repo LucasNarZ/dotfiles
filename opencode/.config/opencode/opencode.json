@@ -39,6 +39,5 @@
       "enabled": true
     }
   },
-  "command": {},
-  "plugin": ["superpowers@git+https://github.com/LucasNarZ/superpowers.git"]
+  "command": {}
 }
