@@ -20,15 +20,6 @@ vim.keymap.set("n", "<leader>y", '"+y', opts);
 vim.keymap.set("n", "<leader>Y", '"+yy', opts);
 vim.keymap.set("v", "<leader>y", '"+y', opts);
 
--- Harpoon
-vim.keymap.set("n", "<leader>a", function() require("harpoon.mark").add_file() end)
-vim.keymap.set("n", "<leader>h", function() require("harpoon.ui").toggle_quick_menu() end)
-vim.keymap.set("n", "<leader>1", function() require("harpoon.ui").nav_file(1) end)
-vim.keymap.set("n", "<leader>2", function() require("harpoon.ui").nav_file(2) end)
-vim.keymap.set("n", "<leader>3", function() require("harpoon.ui").nav_file(3) end)
-vim.keymap.set("n", "<leader>4", function() require("harpoon.ui").nav_file(4) end)
-vim.keymap.set("n", "<leader>5", function() require("harpoon.ui").nav_file(5) end)
-
 -- Neovim-Tree
 local treeApi = require('nvim-tree.api')
 local view = require('nvim-tree.view')
