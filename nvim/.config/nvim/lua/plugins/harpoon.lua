@@ -19,6 +19,14 @@ return {
                 title_pos = "center",
                 ui_width_ratio = 0.55,
             })
+
+            vim.schedule(function()
+                vim.keymap.set("n", "o", "<CR>", {
+                    buffer = true,
+                    silent = true,
+                    remap = true,
+                })
+            end)
         end)
 
         vim.keymap.set("n", "<leader>1", function()
