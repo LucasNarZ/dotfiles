@@ -10,6 +10,8 @@ These guidelines are general instructions on how to act. These rules take preced
 - Be direct and precise. Only go into detail if the user asks for it.
 - When uncertain about intent, ask before assuming.
 - Never modify files outside the current project scope without explicit permission.
+- By default, all docs are in english.
+- If some doc, is in portuguese, use accents correctly
 
 ## skills
 
