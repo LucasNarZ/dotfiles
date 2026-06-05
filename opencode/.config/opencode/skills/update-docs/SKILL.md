@@ -1,6 +1,6 @@
 ---
 name: update-docs
-description: Use when preparing branch changes for review or PR creation and documentation may need to be updated based on the git diff against a target branch.
+description: Use when preparing branch changes for review or PR creation and documentation impact must be identified from the git diff against a target branch.
 license: MIT
 compatibility: opencode
 metadata:
@@ -10,7 +10,7 @@ metadata:
 
 ## What I do
 
-Review the git diff between the current branch and a target branch, identify repository docs affected by those changes, and update the relevant documentation before the PR is created.
+Review the git diff between the current branch and a target branch, identify documentation impact, and hand off documentation writing standards to `write-doc`.
 
 ## Trigger
 
@@ -45,39 +45,30 @@ git diff <target-branch>...HEAD
 
 Treat the diff as the primary source of truth.
 
-### Step 3: Locate related documentation
+### Step 3: Identify documentation impact
 
-Search the repository for documentation that matches the changed behavior, files, commands, workflows, or public contracts.
+Use the diff to identify changed behavior, files, commands, workflows, public contracts, architecture, or standards that may need documentation.
 
-Check locations such as:
-- `README.md`
-- `docs/`
-- feature-specific markdown files
-- local skill docs when the workflow changed
+Report the documentation areas that appear affected, such as README content, module docs, architecture docs, standards docs, local skills, or release-facing docs.
 
-Update only the documentation that is directly affected by the diff.
+Do not apply documentation standards in this skill. Invoke `write-doc` to create or update the actual documentation using the repository documentation patterns.
 
-### Step 4: Apply the documentation updates
+### Step 4: Hand off to write-doc
 
-Edit the relevant docs to match the current branch behavior.
+If documentation changes are needed, invoke `write-doc` with the relevant diff context, affected files, and target documentation areas.
 
-Prefer concrete updates such as:
-- new commands or flags
-- changed setup steps
-- updated workflow order
-- renamed files, paths, or interfaces
-- behavior changes that affect users or contributors
+If no documentation changes are needed, say that explicitly and explain which diff facts led to that conclusion.
 
-### Step 5: Report what changed
+### Step 5: Report the result
 
-Summarize which documentation files were updated and why they were relevant to the branch diff.
+Summarize the diff scope, the documentation areas identified, and whether `write-doc` was invoked.
 
 If no doc changes are needed, say that explicitly.
 
 ## Rules
 
 - Always base documentation updates on the actual git diff, not assumptions
-- Update only docs that are directly affected by the branch changes
-- Prefer repository docs over adding new docs unless the diff introduces a genuinely undocumented workflow
+- Use this skill to identify documentation impact, not to define documentation structure or prose standards
+- Delegate module docs, architecture docs, and standards docs to `write-doc`
 - If the diff is docs-only, still verify whether existing docs now need consistency updates elsewhere
 - If the changes are ambiguous and documentation impact is unclear, ask the user instead of guessing
