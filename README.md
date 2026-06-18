@@ -1,6 +1,6 @@
 # Lucas' Dotfiles
 
-> A compact, keyboard-first development environment built around Neovim, Zsh, tmux, and OpenCode.
+> A compact, keyboard-first development environment built around Neovim, Zsh, tmux, OpenCode, Codex, and Claude.
 
 These dotfiles focus on a fast terminal workflow: fuzzy finding, project navigation, LSP-powered editing, persistent tmux sessions, useful shell plugins, and a clean dark aesthetic.
 
@@ -12,13 +12,15 @@ These dotfiles focus on a fast terminal workflow: fuzzy finding, project navigat
 | Shell | Zsh + Oh My Zsh + Powerlevel10k |
 | Terminal multiplexer | tmux + TPM |
 | Theme | Tokyo Night / Catppuccin-inspired dark colors |
-| AI workflow | OpenCode commands, agents, and local config |
+| AI workflow | OpenCode commands, agents, and shared Codex/Claude links |
 
 ## Repository Layout
 
 ```text
 .
 +-- nvim/       # Neovim configuration
++-- claude/     # Claude config links backed by OpenCode files
++-- codex/      # Codex config links backed by OpenCode files
 +-- opencode/   # OpenCode commands, agents, and package config
 +-- tmux/       # tmux configuration
 `-- zsh/        # Zsh, Oh My Zsh plugins, and Powerlevel10k config
@@ -149,9 +151,11 @@ tmux is configured for vi-style copy mode, mouse support, clipboard integration,
 | Session restore | Enabled through tmux-continuum |
 | Status colors | Tokyo Night-style dark palette |
 
-## OpenCode
+## AI Tools
 
 The `opencode` directory contains local OpenCode configuration, reusable commands, and specialized agents for development workflows.
+
+The `codex` and `claude` directories expose the same shared OpenCode commands, agents, skills, and instructions through tool-specific config paths using symlinks. MCP server definitions are kept as tool-specific config files because Codex and Claude use different config schemas.
 
 ### Commands
 
@@ -182,7 +186,7 @@ This repository is designed to be used with GNU Stow. Each top-level directory i
 Example:
 
 ```sh
-stow nvim zsh tmux opencode
+stow nvim zsh tmux opencode codex claude
 ```
 
 Common targets:
@@ -194,6 +198,9 @@ Common targets:
 | `zsh/.p10k.zsh` | `~/.p10k.zsh` |
 | `tmux/.tmux.conf` | `~/.tmux.conf` |
 | `opencode/.config/opencode` | `~/.config/opencode` |
+| `codex/.codex` | `~/.codex` |
+| `claude/.claude` | `~/.claude` |
+| `claude/.claude.json` | `~/.claude.json` |
 
 ## Philosophy
 
