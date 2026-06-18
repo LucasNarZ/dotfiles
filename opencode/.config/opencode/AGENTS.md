@@ -61,18 +61,3 @@ These guidelines are general instructions on how to act. These rules take preced
 - Never force push to main/master.
 - Always ask before creating, deleting, or merging branches.
 
-## nestjs-standards
-
-- Use class-validator for DTOs.
-- Follow NestJS modular architecture.
-- Use Sequelize with sequelize-typescript for database.
-- HTTP-only cookies for auth tokens.
-- Before marking done: `npm run lint && npm run typecheck`
-
-## fastapi-standards
-
-- Use Pydantic v2 for validation.
-- Type hints required on all functions.
-- Follow PEP 8.
-- Use SQLAlchemy for database.
-- Before marking done: `ruff check . && ruff format . && pyright && pytest`
