@@ -1,0 +1,280 @@
+# Análise de Migração: Lambdas individuais → API Lambda central
+
+## Contexto
+
+A base está migrando de dezenas de Lambdas individuais por endpoint para um único Lambda `api` baseado em FastAPI. Cada Lambda antigo segue o padrão `lambda_api` (HTTP-facing) + `lambda` plain (worker de DB interno), onde o "parent" recebe a requisição HTTP, valida, e chama o filho (que acessa o RDS dentro da VPC).
+
+O Lambda `api` já roda dentro da VPC e acessa o RDS diretamente via SQLAlchemy — eliminando a necessidade do padrão parent/child para a maioria dos casos.
+
+---
+
+## Estado atual
+
+### Já migrados para o `api` Lambda
+
+| Endpoint | Service |
+|---|---|
+| `GET /locals/{local_id}` | LocalService |
+| `DELETE /locals/{local_id}` | LocalService |
+| `POST /locals/{local_id}/consumption/configuration` | LocalService |
+| `GET /locals/{local_id}/consumption/configuration` | LocalService |
+| `GET /locals/{local_id}/devices` | LocalService |
+| `GET /locals/{local_id}/consumption` | LocalService (branch atual) |
+| `GET /locals/{local_id}/consumption/home` | LocalService (branch atual) |
+| `GET /locals/{local_id}/consumption/picker` | LocalService (branch atual) |
+| `GET /locals/{local_id}/environments` + CRUD completo | EnvironmentService |
+| `GET /users/{user_id}/notifications` + views | NotificationService |
+| Alexa skill (via router) | Alexa integration |
+
+---
+
+## Resumo do inventário restante
+
+| Terraform service | Endpoints lambda_api restantes |
+|---|---|
+| `user` | 16 |
+| `scenario` | 8 HTTP-facing |
+| `device` | 8 HTTP-facing |
+| `geofence_collection` | 8 |
+| `geofenceRoutine` | 7 |
+| `dependent` | 5 |
+| `mirroring` | 3 |
+| `local` | 3 (consumption — branch atual) |
+| `routine` | 2 |
+| `button_config` | 5 métodos / 1 lambda |
+| `order` | 2 |
+| `notification` | 1 |
+| `policy` | 1 |
+
+**Total estimado: ~73 integrações HTTP ainda em Lambdas individuais.**
+
+---
+
+## Cuidados gerais durante toda a migração
+
+**VPC e serviços externos:** O Lambda `api` roda dentro da VPC para acessar o RDS. Serviços AWS fora da VPC — IoT Core, SNS, Cognito, AWS Location Service — exigem NAT Gateway ou VPC endpoints. O padrão correto é **nunca chamar esses serviços de dentro do `api` Lambda**: persistir no DB e enfileirar um comando para um worker externo (já é o padrão de `iot_service`, `sync_scenarios_worker`).
+
+**Contratos de resposta:** Cada Lambda legado tem uma resposta própria. Antes de remover a integração Terraform, garantir que a rota FastAPI retorna o mesmo shape de sucesso (campos, tipos, nesting). Erros podem divergir do legado — o contrato da API central já é diferente para 4xx.
+
+**Autorizador:** Lambdas legados usam Cognito Authorizer no API Gateway. O `api` Lambda faz a validação JWT internamente. Garantir que `security.py` processa o mesmo header/claims que o Cognito Authorizer do legado injetava.
+
+**Terraform:** Remover o módulo `lambda_api` **e** o módulo `lambda` filho juntos no mesmo PR. Nunca deixar o filho órfão sem que o `api` já esteja servindo a rota em produção.
+
+**Remoção do `pandas`/`AWSSDKPandas-Python310` layer:** Os três Lambdas de consumo usam esse layer. Após migrar consumo, esse layer pode ser aposentado nesse serviço.
+
+**Rollback:** A integração `{proxy+}` no API Gateway captura qualquer rota não declarada explicitamente e roteia para o `api` Lambda. Isso significa que basta remover o módulo `lambda_api` do Terraform para que a rota passe a cair no `api`. O rollback é recriar o módulo `lambda_api`.
+
+---
+
+## Ordem de migração recomendada
+
+### Wave 1 — Leituras puras de DB (risco mínimo)
+
+Sem efeitos colaterais, sem serviços externos. São as migrações mais seguras e entregam o maior volume de remoção de Lambdas por esforço.
+
+| Endpoint | Lambda legado | Risco | Benefício | Observação |
+|---|---|---|---|---|
+| `GET /users/{userId}` | `smartly_get_user` | Baixo | Médio | DB read puro |
+| `GET /users` (admin) | `smartly_get_user_by_name_or_email` | Baixo | Médio | Usa `authorizer_admin` — mapear claim admin no `security.py` |
+| `GET /users/{userId}/locals` | `smartly_get_locals` | Baixo | Alto | DB read; usado em todo login |
+| `GET /devices/types` | `smartly_get_device_types` | Baixo | Médio | DB read, python 3.10 → migrar para 3.12 |
+| `GET /devices/{deviceId}/virtual` | `smartly_get_virtual_devices` | Baixo | Médio | DB read, python 3.10 → migrar para 3.12 |
+| `GET /locals/{localId}/devices/picker` | `smartly_get_device_picker` | Baixo | Médio | DB read |
+| `GET /locals/{localId}/scenarios` | `smartly_get_scenarios` | Baixo | Alto | DB read |
+| `GET /locals/{localId}/scenarios/{scenarioId}` | `smartly_get_scenarios_devices` | Baixo | Alto | DB read |
+| `GET /locals/{localId}/scenarios/picker` | `smartly_get_scenario_picker` | Baixo | Médio | DB read |
+| `GET /locals/{localId}/scenarios/deviceScenarios` | `smartly_get_device_scenarios` | Baixo | Médio | DB read |
+| `GET /users/{userId}/dependents` | `smartly_get_dependents` | Baixo | Médio | DB read |
+| `GET /users/{userId}/dependents/{dependentId}/permission` | `smartly_get_permission` | Baixo | Médio | DB read |
+| `PATCH /users/{userId}/dependents/{dependentId}/permission` | `smartly_update_permission` | Baixo | Médio | DB write simples |
+| `GET /devices/{deviceId}/mirroring` | `smartly_get_mirroring` | Baixo | Médio | DB read |
+| `GET /locals/{localId}/devices/mirroring` | `smartly_get_mirroring_candidates` | Baixo | Médio | DB read |
+| `GET /locals/{localId}/geofenceCollection/geofences/{geofenceId}` | `smartly_get_local_rule` | Baixo | Médio | DB read |
+| `PATCH /locals/{localId}/geofenceCollection/geofences` | `smartly_update_geofence_status` | Baixo | Baixo | DB update |
+| Todos os `geofenceRoutine` exceto create | `get/delete/update/copy` routines | Baixo | Médio | DB CRUD; `sunlibs` para solar já é pure Python, pode ser inline |
+| `GET /devices/{deviceId}/routine` | `smartly_get_routine` | Baixo | Médio | DB + `convert-routine-formats` layer → lógica de conversão vai para o `api` |
+| `PATCH /devices/{deviceId}/order` + scenario order | `smartly_order` | Baixo | Médio | DB update; um Lambda serve dois recursos via `api_integration` |
+| `PATCH /users/{userId}/configuration` | `smartly_update_configuration` | Baixo | Baixo | DB update |
+| `button_config` (GET, POST, DELETE, PUT) | `smartly_button_config` | Baixo | Médio | DB CRUD, 5 métodos em 1 Lambda — migrar juntos |
+
+**Workers a criar nessa wave:** nenhum.
+
+**Dependências de layer a internalizar:** `convert-routine-formats-layer` (formato de rotina) e `sunlibs-layer` (cálculo solar) precisam ser reescritos como módulos Python dentro do `api` package ou extraídos para `src/packages/` como shared packages.
+
+---
+
+### Wave 2 — DB + workers assíncronos já existentes (risco baixo-médio)
+
+Esses endpoints fazem writes no DB e já dependem de `sync_scenarios_worker` ou `iot_service` para efeitos colaterais. O padrão de enfileirar para SQS já existe e está testado.
+
+| Endpoint | Lambda legado | Risco | Benefício | Observação |
+|---|---|---|---|---|
+| `POST /locals/{localId}/scenarios` | `smartly_create_scenario` | Médio | Alto | DB + enqueue `sync_scenarios` |
+| `DELETE /locals/{localId}/scenarios/{scenarioId}` | `smartly_parent_delete_scenario` | Médio | Alto | DB + enqueue `sync_scenarios` |
+| `PATCH /locals/{localId}/scenarios/{scenarioId}` | `smartly_parent_update_scenario` | Médio | Alto | DB + S3 (imagem) + enqueue `sync_scenarios` |
+| `POST /locals/{localId}/scenarios/{scenarioId}/trigger` | `smartly_trigger_scenario` | Médio | Alto | DB + enqueue `iot` — verificar se usa invoke direto ou SQS |
+| `PATCH /devices/{deviceId}/mirroring` | `smartly_device_mirroring` | Médio | Médio | DB + invoke `smartly_device_mirroring_propagate` → converter para SQS |
+| `POST /locals/{localId}/geofenceCollection/geofences/routine` | `smartly_create_geofence_routine` | Médio | Médio | DB + `sunlibs` solar calc — solar é pure Python, pode ser inline |
+
+**Workers a criar nessa wave:**
+
+- **`mirroring_worker`**: `smartly_device_mirroring_propagate` atualmente é chamado via invoke síncrono (Lambda-to-Lambda). Antes de migrar o endpoint de mirroring, converter para consumidor SQS. O `api` enfileira; o worker propaga.
+
+---
+
+### Wave 3 — DB + Cognito (risco médio)
+
+Cognito está fora da VPC. O `api` Lambda precisa de acesso de rede à API do Cognito. Opções:
+1. VPC endpoint para Cognito (recomendado — sem NAT).
+2. NAT Gateway (já pode existir na infra).
+3. Cognito worker via SQS (recomendado para operações de escrita, como criação/deleção).
+
+Leituras do Cognito (validação de token) já ocorrem no `api` via JWT. O problema são as **chamadas administrativas** (criar user pool entry, deletar, atualizar atributos).
+
+| Endpoint | Lambda legado | Risco | Benefício | Observação |
+|---|---|---|---|---|
+| `PATCH /users/{userId}` | `smartly_parent_update_user` | Médio | Alto | Cognito `AdminUpdateUserAttributes` + DB |
+| `DELETE /users/{userId}` | `smartly_parent_delete_user` | Médio | Alto | Cognito `AdminDeleteUser` + DB |
+| `POST /users/{userId}/dependents` | `smartly_create_dependent` | Médio | Médio | Cognito criação + DB |
+| `DELETE /users/{userId}/dependents/{dependentId}` | `smartly_parent_delete_dependent` | Médio | Médio | Cognito deleção + DB |
+
+**Workers a criar nessa wave:**
+
+- **`cognito_worker`**: Para operações de escrita no Cognito (create/update/delete user pool entries). O `api` persiste no DB e enfileira `{ action, cognito_sub, attributes }`. O worker processa as chamadas administrativas fora da VPC. Isso desacopla o `api` Lambda das credenciais `COGNITO_CLIENT_ID`/`SECRET`.
+
+**`POST /users` — caso especial (Wave 5):** endpoint público (`authorization_type = "NONE"`), criação de conta. Discutido separadamente abaixo.
+
+---
+
+### Wave 4 — DB + IoT Core / AWS Location / S3 complexo (risco alto)
+
+Esses endpoints tocam múltiplos serviços externos. O padrão correto é: API valida + persiste no DB + enfileira para worker. A maioria já tem workers parciais (`iot_service`, `device_sync_worker`).
+
+| Endpoint | Lambda legado | Risco | Benefício | Observação |
+|---|---|---|---|---|
+| `POST /locals/{localId}/environments/{environmentId}/devices` | `smartly_parent_create_device` | Alto | Alto | DB + IoT shadow creation + DynamoDB + S3. Enfileirar para worker. |
+| `DELETE /devices/{deviceId}` | `smartly_parent_delete_device` | Alto | Alto | DB + IoT shadow delete + DynamoDB cleanup |
+| `PATCH /users/{userId}/devices/{deviceId}/replace` | `smartly_parent_replace_devices` | Alto | Alto | DB + IoT + DynamoDB + S3 |
+| `GET /devices/{deviceId}/configuration` | `smartly_parent_get_configuration` | Alto | Médio | **Leitura de IoT shadow** — se estado for espelhado no DB, muda para leitura pura |
+| `POST /devices/{deviceId}/configuration` | `smartly_parent_create_configuration` | Alto | Médio | DB + IoT shadow update + S3 |
+| `POST /devices/{deviceId}/routine` | `smartly_parent_create_routine` | Alto | Médio | DB + IoT + `convert-routine-formats` + sunlibs |
+| `PATCH /locals/{localId}` | `smartly_parent_update_local` | Alto | Alto | DB + IoT + S3 + AWS Location |
+| `POST /users/{userId}/locals` | `smartly_parent_create_local` | Alto | Alto | DB + maps secret (Secrets Manager) + possível IoT |
+| `POST /locals/{localId}/geofenceCollection/geofences` | `smartly_parent_create_local_rule` | Alto | Baixo | DB + AWS Location Service (geofence criação) |
+| `PUT /locals/{localId}/geofenceCollection/geofences/{geofenceId}` | `smartly_update_geolocation` | Alto | Baixo | DB + AWS Location |
+| `DELETE /locals/{localId}/geofenceCollection/geofences/{geofenceId}` | `smartly_delete_geofence` | Médio | Baixo | DB + AWS Location deleção |
+| `PATCH /locals/{localId}/geofenceCollection/{userId}` | `smartly_parent_update_user_location` | Alto | Baixo | AWS Location position update |
+| `GET /locals/{localId}/geofenceCollection/geofences` | `smartly_parent_get_all_geofences` | Alto | Baixo | Atualmente invoca filho; filho é DB read puro — consolidar |
+
+**Workers a criar nessa wave:** nenhum novo.
+
+O `api` Lambda acessa RDS, DynamoDB e S3 diretamente via VPC endpoints. AWS Location Service também tem VPC endpoint — geofence create/update/delete são executados inline. Operações IoT (shadow create/delete/update) são enfileiradas para `iot_service` via SQS, exatamente como já ocorre nos flows de cenário e device sync.
+
+---
+
+### Wave 5 — Casos especiais (risco alto, tratar individualmente)
+
+| Endpoint | Lambda legado | Risco | Observação |
+|---|---|---|---|
+| `POST /users` | `smartly_create_user` | **Crítico** | Único endpoint público (`NONE` auth). Criação de conta + Cognito. Centralizar no `api` expõe o Lambda a tráfego não autenticado. Manter em Lambda separado ou criar route sem middleware de auth com rate limiting estrito. |
+| `GET /users/{userId}/address` | `smartly_get_address` | Alto | Acessa Secrets Manager para maps key. Pode ser feito do `api` se tiver permissão na role, mas melhor mover a key para `settings.py` via env var. |
+| `POST /users/{userId}/policy` | `smartly_attach_principal_policy` | Alto | IoT `AttachPolicy` — call direto ao IoT fora da VPC. Converter para enfileirar no `iot` worker. |
+| `POST /users/{userId}/notifications/register` | `smartly_sns_subscribe` | Médio | SNS subscribe — fora da VPC. Pode ir para `sns_service` worker ou SNS endpoint no `api` via VPC endpoint. |
+| Alexa skill CRUD | `smartly_alexa_skill_*` | N/A | Não é endpoint HTTP do `api`. Permanece como Lambda de evento Alexa. |
+
+---
+
+## Workers existentes — permanecem como estão
+
+| Worker | Razão para manter |
+|---|---|
+| `iot_service` | Publica em IoT Core (fora da VPC). Consumidor SQS. Permanece. |
+| `device_sync_worker` | Disparado por IoT Rule. Lê RDS + DynamoDB + enfileira `iot`. Permanece. |
+| `sync_scenarios_worker` | Disparado por SQS. Reconstrói estado de cenário e enfileira `iot`. Permanece. |
+| `notification_service` | Disparado por SQS + IoT Rule. Permanece. |
+| `sns_service` | Publica SNS (fora da VPC). Permanece. |
+| `reset_to_factory` | Disparado por IoT Rule. Permanece. |
+| `smartly_scenario_verify_status` | Consumer de DynamoDB Stream. Permanece. |
+| `smartly_alexa_*` | Trigger externo Alexa. Permanece. |
+| `smartly_alexa_trigger_events` | DynamoDB Stream consumer. Permanece. |
+| `smartly_geolocation_event_handler` | Sem endpoint HTTP. Permanece como event handler. |
+| `vdc_handler` | Handler específico. Avaliar separadamente. |
+
+---
+
+## Workers novos sugeridos
+
+| Worker | Trigger | Responsabilidade | Urgência |
+|---|---|---|---|
+| `cognito_worker` | SQS | Operações admin no Cognito (create/update/delete user) — Cognito não tem VPC endpoint viável e NAT é caro | Wave 3 |
+| `mirroring_worker` | SQS | Converter o invoke síncrono atual de `smartly_device_mirroring_propagate` para SQS — elimina acoplamento Lambda-to-Lambda | Wave 2 |
+
+**Descartados:**
+
+| Worker | Motivo do descarte |
+|---|---|
+| `device_provisioning_worker` | RDS, DynamoDB e S3 são acessíveis via VPC endpoint diretamente do `api`; IoT Core já tem `iot_service` |
+| `geolocation_worker` | AWS Location Service tem VPC endpoint — o `api` acessa direto |
+| `configuration_worker` | Shadow writes enfileiram para `iot_service`; shadow reads podem ser substituídos por leitura do RDS se o estado for espelhado no DB a cada escrita |
+
+---
+
+## Layers legados a internalizar
+
+| Layer | Onde é usado | Estratégia |
+|---|---|---|
+| `rds-proxy-layer-arn` | Todos os Lambdas de DB | Substituído pelo SQLAlchemy do `api`. Não é necessário. |
+| `lambda-helpers-layer-arn` | Helpers legados (JWT, DB connection) | Não necessário no `api` — tem suas próprias abstrações. |
+| `AWSSDKPandas-Python310` | Lambdas de consumo | Removido após Wave 0 (consumo). |
+| `convert-routine-formats-layer-arn` | `smartly_get_routine`, `smartly_parent_create_routine` | Reescrever como módulo Python em `src/packages/` ou `app/domain/`. |
+| `sunlibs-layer-arn` | Geofence routine create, create routine | Cálculo solar é pure Python — extrair para `src/packages/sun_utils`. |
+
+---
+
+## Avaliação de risco por endpoint
+
+### Matriz risco × benefício
+
+```
+Alto  │  POST /users (especial)         │  CREATE/DELETE device, update local
+      │  Policy IoT                     │  CREATE routine, configuration
+      │                                 │  Geofence create/update
+      ├─────────────────────────────────┼──────────────────────────────────────
+Médio │  Cognito user ops               │  Scenarios CRUD + trigger
+      │  SNS subscribe                  │  Device mirroring PATCH
+      │                                 │  Address (maps key)
+      ├─────────────────────────────────┼──────────────────────────────────────
+Baixo │  Geofence reads                 │  ALL reads (user, device, scenario,
+      │  Order update                   │  routine, dependent, locals)
+      │  Config update                  │  Button config, geofenceRoutine CRUD
+      └─────────────────────────────────┴──────────────────────────────────────
+             Baixo benefício                    Alto benefício
+```
+
+---
+
+## Pré-requisitos técnicos
+
+1. **Confirmar VPC endpoints ativos:** DynamoDB, S3 e Location Service devem ter VPC endpoints configurados no VPC do `api` Lambda. Verificar no Terraform antes de cada wave que depende desses serviços.
+
+2. **Role do `api` Lambda:** conceder a role `invoke_iot_dynamo_s3` (ou equivalente) ao `api` Lambda para que ele possa escrever em DynamoDB, S3 e enfileirar para `iot_service`.
+
+3. **Estratégia de espelhamento do IoT Shadow no DB:** para `GET /devices/{deviceId}/configuration`, avaliar se vale armazenar o último shadow state no RDS a cada escrita — eliminaria a leitura de shadow em tempo real e remove a única dependência de leitura do IoT Core.
+
+4. **Extração das layers `convert-routine-formats` e `sunlibs` para packages Python:** necessário antes das Waves 1-2 para que rotinas e geofence routines funcionem no `api`.
+
+5. **`cognito_worker`:** implementar e validar antes da Wave 3.
+
+---
+
+## Resumo executivo
+
+| Wave | Volume | Risco médio | Dependências externas |
+|---|---|---|---|
+| Wave 1 — Leituras DB puras | ~30 endpoints | Baixo | Apenas RDS |
+| Wave 2 — DB + workers existentes | ~6 endpoints | Baixo-Médio | SQS já existente |
+| Wave 3 — DB + Cognito | ~4 endpoints | Médio | `cognito_worker` novo |
+| Wave 4 — IoT/Location/S3 | ~13 endpoints | Alto | VPC endpoints (DynamoDB, S3, Location) + `iot_service` existente |
+| Wave 5 — Casos especiais | ~5 endpoints | Alto-Crítico | Decisões de arquitetura pendentes |
+
+A Wave 1 sozinha elimina ~40% dos Lambdas individuais com praticamente zero risco, pois são todos reads de DB que o `api` já está preparado para executar.
