@@ -3,7 +3,11 @@
   "mcp": {
     "serper": {
       "type": "local",
-      "command": ["npx", "-y", "serper-search-scrape-mcp-server"],
+      "command": [
+        "npx",
+        "-y",
+        "serper-search-scrape-mcp-server"
+      ],
       "environment": {
         "SERPER_API_KEY": "{env:SERPER_API_KEY}"
       },
@@ -26,7 +30,11 @@
     },
     "trello": {
       "type": "local",
-      "command": ["npx", "-y", "@delorenj/mcp-server-trello"],
+      "command": [
+        "npx",
+        "-y",
+        "@delorenj/mcp-server-trello"
+      ],
       "enabled": true,
       "environment": {
         "TRELLO_API_KEY": "{env:TRELLO_API_KEY}",
@@ -36,6 +44,11 @@
     "clickup": {
       "type": "remote",
       "url": "https://mcp.clickup.com/mcp",
+      "enabled": true
+    },
+    "ai-memory": {
+      "type": "remote",
+      "url": "http://127.0.0.1:49374/mcp",
       "enabled": true
     }
   },
