@@ -25,11 +25,15 @@ enabled = true
 url = "https://mcp.clickup.com/mcp"
 enabled = true
 
+[mcp_servers.ai-memory]
+url = "http://127.0.0.1:49374/mcp"
+default_tools_approval_mode = "approve"
+
 [projects."/home/lucas/Documents/smartly.backend_smartly"]
 trust_level = "trusted"
 
 [tui.model_availability_nux]
-"gpt-5.5" = 2
+"gpt-5.5" = 3
 
 [notice.model_migrations]
 "gpt-5.3-codex" = "gpt-5.4"
