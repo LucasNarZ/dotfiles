@@ -11,7 +11,7 @@ return {
         dependencies = { "mason.nvim", "neovim/nvim-lspconfig" },
         config = function()
             require("mason-lspconfig").setup({
-                ensure_installed = { "ts_ls", "pyright", "html", "tailwindcss", "prettier", "emmet_ls" }
+                ensure_installed = { "ts_ls", "pyright", "ruff", "html", "tailwindcss", "prettier", "emmet_ls" }
             })
         end
     },
@@ -19,6 +19,11 @@ return {
         "neovim/nvim-lspconfig",
         config = function()
             local nvim_lsp = require("lspconfig")
+            local util = require("lspconfig.util")
+
+            local python_root = function(fname)
+                return util.root_pattern(".git")(fname) or util.root_pattern("pyproject.toml")(fname)
+            end
 
             local on_attach = function(client, bufnr)
                 local buf_map = function(mode, lhs, rhs)
@@ -42,10 +47,17 @@ return {
 
 
             nvim_lsp.pyright.setup {
+                root_dir = python_root,
                 on_attach = on_attach,
                 flags = {
                     debounce_text_changes = 150,
                 },
+                capabilities = capabilities
+            }
+
+            nvim_lsp.ruff.setup {
+                root_dir = python_root,
+                on_attach = on_attach,
                 capabilities = capabilities
             }
 
