@@ -8,6 +8,10 @@ return {
             view = {
                 width = 60,
             },
+            update_focused_file = {
+                enable = true,
+                update_root = false,
+            },
 
 		})
 	end,
