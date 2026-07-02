@@ -86,29 +86,25 @@ Use the response to confirm the PR was created against the intended target branc
 Only include sections that have real content. Omit any section that would be N/A or a placeholder.
 
 ```markdown
-## Context
-[What problem this solves or what need it addresses]
+## Summary
+[1–2 sentences: what this PR does and why]
 
----
+Closes task: [TASK-123]
 
-## Changes Made
+## Changes
+- [Key change 1]
+- [Key change 2]
+- [Key change 3]
 
-### Added
-- [New things]
+## Implementation notes
+[Anything non-obvious about the approach, trade-offs made, or alternatives considered]
 
-### Modified
-- [What changed and why]
+## Testing
+- [How you verified it works]
+- [Edge cases covered]
 
-### Removed
-- [What was deleted]
-
----
-
-## Files Changed
-
-| File | Change Type | Purpose |
-|------|-------------|---------|
-| path/to/file | added/modified/deleted | what it does |
+## Notes for reviewers
+[Anything you want eyes on, areas of uncertainty, or things intentionally left out of scope]
 ```
 
 ## Rules
