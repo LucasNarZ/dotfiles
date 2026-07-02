@@ -1,1 +1,16 @@
 .env
+
+# Claude generated state
+claude/.claude/.credentials.json
+claude/.claude/.last-cleanup
+claude/.claude/.last-update-result.json
+claude/.claude/backups/
+claude/.claude/cache/
+claude/.claude/file-history/
+claude/.claude/history.jsonl
+claude/.claude/paste-cache/
+claude/.claude/projects/**/*.jsonl
+claude/.claude/sessions/
+
+# OpenCode generated/system-managed skills
+opencode/.config/opencode/skills/.system/

@@ -43,3 +43,43 @@
 {"display":"/usage","pastedContents":{},"timestamp":1781810910359,"project":"/home/lucas/Documents/smartly.backend_smartly","sessionId":"c35cf754-dbe0-4b1b-a3d7-21c9fc7f5fa4"}
 {"display":"/resume","pastedContents":{},"timestamp":1781810921870,"project":"/home/lucas/Documents/smartly.backend_smartly","sessionId":"c35cf754-dbe0-4b1b-a3d7-21c9fc7f5fa4"}
 {"display":"/resume","pastedContents":{},"timestamp":1781810963095,"project":"/home/lucas/Documents/smartly.backend_smartly","sessionId":"1f3d6105-fda4-49f8-a309-0ca99410963c"}
+{"display":"/mcp","pastedContents":{},"timestamp":1782141830364,"project":"/home/lucas/Documents/smartly.backend_smartly","sessionId":"c25d5271-e1ff-4b3f-8c78-b7e4f908438d"}
+{"display":"where do we left off?","pastedContents":{},"timestamp":1782141852907,"project":"/home/lucas/Documents/smartly.backend_smartly","sessionId":"c25d5271-e1ff-4b3f-8c78-b7e4f908438d"}
+{"display":"do you readed from memory?","pastedContents":{},"timestamp":1782141908602,"project":"/home/lucas/Documents/smartly.backend_smartly","sessionId":"c25d5271-e1ff-4b3f-8c78-b7e4f908438d"}
+{"display":"/usage","pastedContents":{},"timestamp":1782142003452,"project":"/home/lucas/Documents/smartly.backend_smartly","sessionId":"c25d5271-e1ff-4b3f-8c78-b7e4f908438d"}
+{"display":"/context","pastedContents":{},"timestamp":1782142025032,"project":"/home/lucas/Documents/smartly.backend_smartly","sessionId":"c25d5271-e1ff-4b3f-8c78-b7e4f908438d"}
+{"display":"/exit","pastedContents":{},"timestamp":1782142041240,"project":"/home/lucas/Documents/smartly.backend_smartly","sessionId":"c25d5271-e1ff-4b3f-8c78-b7e4f908438d"}
+{"display":"/usage","pastedContents":{},"timestamp":1782233267639,"project":"/home/lucas/Documents/smartly.backend_smartly","sessionId":"c52adb3c-8a71-4137-8ec0-525a1122e7b0"}
+{"display":"/exit","pastedContents":{},"timestamp":1782234327077,"project":"/home/lucas/Documents/smartly.backend_smartly","sessionId":"c52adb3c-8a71-4137-8ec0-525a1122e7b0"}
+{"display":"/usage","pastedContents":{},"timestamp":1782320183281,"project":"/home/lucas/Documents/smartly.backend_smartly","sessionId":"ee968047-901e-4a90-884d-4c3ce84d1383"}
+{"display":"/exit","pastedContents":{},"timestamp":1782320219239,"project":"/home/lucas/Documents/smartly.backend_smartly","sessionId":"ee968047-901e-4a90-884d-4c3ce84d1383"}
+{"display":"based on the doc, @docs/architecture/migration-analysis.md , write to me a set of tasks title that for the wave1, migrating 1 domain per task","pastedContents":{},"timestamp":1782321633679,"project":"/home/lucas/Documents/smartly.backend_smartly","sessionId":"60181190-5a76-43c2-9456-2f6f91f64e4d"}
+{"display":"em portugues sem o prefixo feat(api)","pastedContents":{},"timestamp":1782321701332,"project":"/home/lucas/Documents/smartly.backend_smartly","sessionId":"60181190-5a76-43c2-9456-2f6f91f64e4d"}
+{"display":"mais especifico nos nomes","pastedContents":{},"timestamp":1782321722249,"project":"/home/lucas/Documents/smartly.backend_smartly","sessionId":"60181190-5a76-43c2-9456-2f6f91f64e4d"}
+{"display":"e para a wave2?","pastedContents":{},"timestamp":1782321911132,"project":"/home/lucas/Documents/smartly.backend_smartly","sessionId":"60181190-5a76-43c2-9456-2f6f91f64e4d"}
+{"display":"e para a wave 3?","pastedContents":{},"timestamp":1782322174160,"project":"/home/lucas/Documents/smartly.backend_smartly","sessionId":"60181190-5a76-43c2-9456-2f6f91f64e4d"}
+{"display":"e para a wave 4?","pastedContents":{},"timestamp":1782322211855,"project":"/home/lucas/Documents/smartly.backend_smartly","sessionId":"60181190-5a76-43c2-9456-2f6f91f64e4d"}
+{"display":"e para a wave 5?","pastedContents":{},"timestamp":1782322219639,"project":"/home/lucas/Documents/smartly.backend_smartly","sessionId":"60181190-5a76-43c2-9456-2f6f91f64e4d"}
+{"display":"/resume","pastedContents":{},"timestamp":1782841046603,"project":"/home/lucas/Documents/smartly.backend_smartly","sessionId":"4f334c04-c7bd-468b-9641-e875a801dd15"}
+{"display":"/exit","pastedContents":{},"timestamp":1782847594606,"project":"/home/lucas/Documents/smartly.backend_smartly","sessionId":"60181190-5a76-43c2-9456-2f6f91f64e4d"}
+{"display":"analise a função @src/handlers/notification_service/function/ , veja se todos esses records seriam aceitos, e me diga as divergencias, nao mexa em nada por enquanto:[Pasted text #1 +52 lines]","pastedContents":{"1":{"id":1,"type":"text","contentHash":"392273aa472a5684"}},"timestamp":1782929079955,"project":"/home/lucas/Documents/smartly.backend_smartly","sessionId":"72323089-25f6-45da-9d64-7441280a475c"}
+{"display":"o change-config nao tem outras variaçoes?","pastedContents":{},"timestamp":1782930146072,"project":"/home/lucas/Documents/smartly.backend_smartly","sessionId":"72323089-25f6-45da-9d64-7441280a475c"}
+{"display":"como seria o dict correto?","pastedContents":{},"timestamp":1782930286530,"project":"/home/lucas/Documents/smartly.backend_smartly","sessionId":"72323089-25f6-45da-9d64-7441280a475c"}
+{"display":"/exit","pastedContents":{},"timestamp":1782932374284,"project":"/home/lucas/Documents/smartly.backend_smartly","sessionId":"72323089-25f6-45da-9d64-7441280a475c"}
+{"display":"/resume","pastedContents":{},"timestamp":1782932615418,"project":"/home/lucas/Documents/smartly.backend_smartly","sessionId":"20d045e4-60a0-44b8-a641-6e2be6fca0a4"}
+{"display":"eu coloquei esse dict na função com algumas modificaçoes, adicione testes para validar isso","pastedContents":{},"timestamp":1782932640426,"project":"/home/lucas/Documents/smartly.backend_smartly","sessionId":"72323089-25f6-45da-9d64-7441280a475c"}
+{"display":"/new","pastedContents":{},"timestamp":1782935508714,"project":"/home/lucas/Documents/smartly.backend_smartly","sessionId":"72323089-25f6-45da-9d64-7441280a475c"}
+{"display":"/model","pastedContents":{},"timestamp":1782935515056,"project":"/home/lucas/Documents/smartly.backend_smartly","sessionId":"d151033e-13c5-4d91-a934-38e1cc466928"}
+{"display":"/clear","pastedContents":{},"timestamp":1782935543384,"project":"/home/lucas/Documents/smartly.backend_smartly","sessionId":"d151033e-13c5-4d91-a934-38e1cc466928"}
+{"display":"/model","pastedContents":{},"timestamp":1783010271454,"project":"/home/lucas/Documents/smartly.backend_smartly","sessionId":"f8499c1b-b5b5-4d98-b5cd-0b7e209ba9a8"}
+{"display":"/usage","pastedContents":{},"timestamp":1783010630515,"project":"/home/lucas/Documents/smartly.backend_smartly","sessionId":"f8499c1b-b5b5-4d98-b5cd-0b7e209ba9a8"}
+{"display":"/model","pastedContents":{},"timestamp":1783010637514,"project":"/home/lucas/Documents/smartly.backend_smartly","sessionId":"f8499c1b-b5b5-4d98-b5cd-0b7e209ba9a8"}
+{"display":"quais são as vulnerabilidades mais comuns em sistemas backend?","pastedContents":{},"timestamp":1783010651971,"project":"/home/lucas/Documents/smartly.backend_smartly","sessionId":"f8499c1b-b5b5-4d98-b5cd-0b7e209ba9a8"}
+{"display":"/usage","pastedContents":{},"timestamp":1783011967052,"project":"/home/lucas/Documents/smartly.backend_smartly","sessionId":"f8499c1b-b5b5-4d98-b5cd-0b7e209ba9a8"}
+{"display":"/model","pastedContents":{},"timestamp":1783012024019,"project":"/home/lucas/Documents/smartly.backend_smartly","sessionId":"f8499c1b-b5b5-4d98-b5cd-0b7e209ba9a8"}
+{"display":"/clear","pastedContents":{},"timestamp":1783012078314,"project":"/home/lucas/Documents/smartly.backend_smartly","sessionId":"f8499c1b-b5b5-4d98-b5cd-0b7e209ba9a8"}
+{"display":"/resume","pastedContents":{},"timestamp":1783012179546,"project":"/home/lucas/Documents/smartly.backend_smartly","sessionId":"fb8441a3-b39a-4ed8-8008-96efcbc2fbdb"}
+{"display":"/mcp","pastedContents":{},"timestamp":1783012566632,"project":"/home/lucas/Documents/smartly.backend_smartly","sessionId":"60181190-5a76-43c2-9456-2f6f91f64e4d"}
+{"display":"faça uma handoff dessa seção para memoria","pastedContents":{},"timestamp":1783012580143,"project":"/home/lucas/Documents/smartly.backend_smartly","sessionId":"60181190-5a76-43c2-9456-2f6f91f64e4d"}
+{"display":"salve de todas as waves","pastedContents":{},"timestamp":1783012679570,"project":"/home/lucas/Documents/smartly.backend_smartly","sessionId":"60181190-5a76-43c2-9456-2f6f91f64e4d"}
+{"display":"/exit","pastedContents":{},"timestamp":1783012720031,"project":"/home/lucas/Documents/smartly.backend_smartly","sessionId":"60181190-5a76-43c2-9456-2f6f91f64e4d"}
