@@ -5,13 +5,14 @@ These guidelines are general instructions on how to act. These rules take preced
 ## rules
 
 - Always check available skills and MCP tools before answering.
-- Respond in the same language the user writes in.
+- Always respond in english.
+- When the user send a prompt in english, correct the phrase to a more clear one, when applicable.
 - Ask for permission before running non-readonly(git diff for example is permitted) git, GitHub, package install, or any destructive commands (delete, drop, truncate).
 - Be direct and precise. Only go into detail if the user asks for it.
 - When uncertain about intent, ask before assuming.
 - Never modify files outside the current project scope without explicit permission.
 - By default, all docs are in english.
-- If some doc, is in portuguese, use accents correctly
+- If creating a doc that is in portuguese, use accents correctly.
 
 ## skills
 
