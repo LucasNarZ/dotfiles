@@ -1,41 +1,41 @@
 ---
 name: pr-generator
-description: Generate structured PR descriptions using GitHub CLI. Trigger when user says anything like "create a PR", "open a PR", "make a PR to [branch]", or "PR para [branch]".
-license: MIT
-compatibility: opencode
-metadata:
-  audience: developers
-  workflow: github
+description: Create GitHub pull requests from the current branch using a target-branch diff, documentation and changelog preparation, optional MCP task context, and GitHub CLI verification. Use whenever the user asks to create, open, or make a PR to another branch.
 ---
 
-## What I do
+# PR Generator
 
-Create a GitHub PR from the current branch to a target branch by analyzing the git diff first, then generating an accurate title and description automatically.
-
-## Trigger
-
-Any message like:
-- "Create a PR to dev"
-- "Cria um PR para main"
-- "Open a PR targeting staging"
-
-The current branch is always the source. The branch mentioned by the user is always the target.
+Create a GitHub pull request from the current branch to a user-provided target branch. Use one branch diff as the primary source of truth across documentation, changelog, and PR generation.
 
 ## Workflow
 
-### Step 1: Resolve branches
+### 1. Resolve the branches
+
+Run:
 
 ```bash
 git branch --show-current
 ```
 
-Use the output as `SOURCE_BRANCH`. The branch the user mentioned is `TARGET_BRANCH`.
+Use the result as `SOURCE_BRANCH` and the branch named by the user as `TARGET_BRANCH`. If the user did not provide a target branch, ask for one before proceeding.
 
-### Step 2: Get the full branch diff
+### 2. Ask about a related task
 
-If the current session already captured the branch diff for the same target branch, reuse it.
+Ask whether a relevant task is related to the pull request unless the user already provided a task ID or explicitly said there is no task.
 
-Otherwise, run:
+If the user provides a task ID:
+
+- Use the connected task-management MCP tools to retrieve the task. Prefer an exact-ID lookup; use MCP search when the provider does not support direct lookup.
+- If multiple task providers are available and the ID does not identify one clearly, ask which provider contains the task.
+- Retrieve the task ID, title, URL, and the description, acceptance criteria, or status needed to explain its relationship to the pull request.
+- If the task cannot be found, ask the user to verify the ID. Never invent task details.
+- Use the task only as supporting context. The git diff remains the source of truth for claims about the implementation.
+
+If there is no related task, continue without a task section.
+
+### 3. Capture the full branch diff once
+
+If the current session already captured the branch diff for the same target branch, reuse it. Otherwise, run:
 
 ```bash
 git log --oneline {TARGET_BRANCH}..HEAD
@@ -43,13 +43,63 @@ git diff {TARGET_BRANCH}...HEAD --stat
 git diff {TARGET_BRANCH}...HEAD
 ```
 
-Read the diff output fully. This is the primary source of truth for what changed.
+Read the complete output and reuse it across every remaining step. Do not switch to `gh pr diff` as the primary analysis source.
 
-### Step 3: Draft the PR from the git diff
+### 4. Prepare repository documentation
 
-Analyze the diff and prepare the final PR title and body before calling GitHub.
+- Invoke `update-docs` with the captured diff before generating the pull request.
+- Let `update-docs` invoke `write-doc` when documentation changes are needed.
+- If the repository uses a `CHANGELOG.md` workflow, invoke `changelog-generator` with the same diff.
+- Run these preparations in this order: `update-docs`, `changelog-generator` when applicable, then PR generation.
 
-### Step 4: Create the PR
+### 5. Draft the pull request
+
+Analyze the captured diff and prepare the final title and body before calling GitHub.
+
+Use this title format:
+
+`[type]: [brief description]`
+
+| Type | When to use |
+|------|-------------|
+| `feat` | New feature |
+| `fix` | Bug fix |
+| `refactor` | Code restructuring without behavior changes |
+| `docs` | Documentation only |
+| `chore` | Tooling, dependencies, or configuration |
+| `perf` | Performance improvement |
+
+Use the following body structure, including only sections with real content:
+
+```markdown
+## Summary
+[Explain what the pull request does and why in one or two sentences.]
+
+## Related task
+[TASK-123: Task title](task URL)
+
+[Summarize the relevant task context and explain how this pull request relates to it.]
+
+## Changes
+- [Key change]
+- [Key change]
+
+## Implementation notes
+[Explain non-obvious decisions, trade-offs, or alternatives.]
+
+## Testing
+- [Verification actually performed]
+- [Edge cases actually covered]
+
+## Notes for reviewers
+[Call out areas needing attention, uncertainties, or intentionally excluded scope.]
+```
+
+Include `Closes TASK-123` only when the retrieved task context and the diff show that the pull request completes the task. Otherwise, use a neutral task reference.
+
+### 6. Create the pull request
+
+Ask for the user's permission immediately before running the non-read-only GitHub command. After approval, run:
 
 ```bash
 gh pr create --base {TARGET_BRANCH} --title "{TYPE}: {brief description}" --body "$(cat <<'EOF'
@@ -60,7 +110,7 @@ EOF
 
 Save the PR URL from the output.
 
-### Step 5: Verify the created PR
+### 7. Verify the created pull request
 
 ```bash
 gh pr view --json number,url,headRefName,baseRefName,changedFiles,additions,deletions
@@ -68,50 +118,13 @@ gh pr view --json number,url,headRefName,baseRefName,changedFiles,additions,dele
 
 Use the response to confirm the PR was created against the intended target branch.
 
-## Title format
-
-`[type]: [brief description]`
-
-| Type | When to use |
-|------|-------------|
-| feat | new feature |
-| fix | bug fix |
-| refactor | code restructuring without behavior change |
-| docs | documentation only |
-| chore | tooling, deps, config |
-| perf | performance improvement |
-
-## Description template
-
-Only include sections that have real content. Omit any section that would be N/A or a placeholder.
-
-```markdown
-## Summary
-[1–2 sentences: what this PR does and why]
-
-Closes task: [TASK-123]
-
-## Changes
-- [Key change 1]
-- [Key change 2]
-- [Key change 3]
-
-## Implementation notes
-[Anything non-obvious about the approach, trade-offs made, or alternatives considered]
-
-## Testing
-- [How you verified it works]
-- [Edge cases covered]
-
-## Notes for reviewers
-[Anything you want eyes on, areas of uncertainty, or things intentionally left out of scope]
-```
-
 ## Rules
 
-- Always write titles and descriptions in English
-- Base everything on the actual git diff, not assumptions about project structure
-- Do not rely on `gh pr diff` as the primary analysis source when the branch git diff is already available
-- Skip "Added", "Modified", or "Removed" subsections if they have no content
-- Skip the "Files Changed" table if there are fewer than 3 files (already covered by the diff analysis)
-- Never invent test steps or validation criteria — omit those sections entirely
+- Always write titles and descriptions in English.
+- Base implementation claims on the actual git diff, not assumptions or task descriptions.
+- Reuse the same captured diff across documentation, changelog, and PR generation.
+- Never use `gh pr diff` as the primary analysis source when the branch diff is available.
+- Omit placeholders and sections without real content.
+- Skip `Added`, `Modified`, or `Removed` subsections when they have no content.
+- Skip the `Files Changed` table when fewer than three files changed.
+- Never invent tests, validation criteria, task details, or task relationships.

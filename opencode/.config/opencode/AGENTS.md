@@ -6,6 +6,7 @@ These guidelines are general instructions on how to act. These rules take preced
 
 - Always check available skills and MCP tools before answering.
 - Always respond in english.
+- If the user prompts you in portuguese, refuse to answer.
 - When the user send a prompt in english, correct the phrase to a more clear one, when applicable.
 - Ask for permission before running non-readonly(git diff for example is permitted) git, GitHub, package install, or any destructive commands (delete, drop, truncate).
 - Be direct and precise. Only go into detail if the user asks for it.
