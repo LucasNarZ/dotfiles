@@ -1,5 +1,7 @@
 .env
 
+.local.zsh
+
 # Claude generated state
 claude/.claude/.credentials.json
 claude/.claude/.last-cleanup
