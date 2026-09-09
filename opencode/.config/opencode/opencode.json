@@ -49,6 +49,14 @@
       "type": "remote",
       "url": "http://127.0.0.1:49374/mcp",
       "enabled": true
+    },
+    "google-calendar": {
+      "type": "remote",
+      "url": "https://calendarmcp.googleapis.com/mcp/v1",
+      "oauth": {
+        "clientId": "{env:GOOGLE_CLIENT_ID}",
+        "clientSecret": "{env:GOOGLE_CLIENT_SECRET}"
+      }
     }
   },
   "command": {}
