@@ -14,7 +14,7 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 vim.api.nvim_create_autocmd("FileType", {
-    pattern = { "yaml", "yml", "terraform" },
+    pattern = { "yaml", "yml", "terraform", "tf" },
     callback = function()
         vim.bo.tabstop = 2
         vim.bo.shiftwidth = 2
