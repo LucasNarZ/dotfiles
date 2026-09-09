@@ -11,7 +11,7 @@ return {
         dependencies = { "mason.nvim", "neovim/nvim-lspconfig" },
         config = function()
             require("mason-lspconfig").setup({
-                ensure_installed = { "ts_ls", "pyright", "ruff", "html", "tailwindcss", "prettier", "emmet_ls" }
+                ensure_installed = { "ts_ls", "pyright", "ruff", "html", "tailwindcss", "prettier", "emmet_ls", "clangd" }
             })
         end
     },
@@ -57,6 +57,11 @@ return {
 
             nvim_lsp.ruff.setup {
                 root_dir = python_root,
+                on_attach = on_attach,
+                capabilities = capabilities
+            }
+
+            nvim_lsp.clangd.setup {
                 on_attach = on_attach,
                 capabilities = capabilities
             }
