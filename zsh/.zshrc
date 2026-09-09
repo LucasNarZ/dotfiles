@@ -4,6 +4,11 @@ plugins=(git zsh-autosuggestions zsh-syntax-highlighting zsh-history-substring-s
 source $ZSH/oh-my-zsh.sh
 
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# Source local file configs
+[[ ! -f ~/.local.zsh ]] || source ~/.local.zsh
+
+
 eval "$(direnv hook zsh)"
 [ -f ~/.env ] && source ~/.env
 
@@ -33,6 +38,7 @@ gub() {
 
 # Aliases
 alias vps-connect='ssh $VPS_USER@$VPS_IP'
+
 
 # uv
 export PATH="$HOME/.local/bin:$PATH"
